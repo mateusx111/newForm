@@ -22,6 +22,7 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { useCep } from "./useCep";
+import { InputMasked } from "@/components/Mask/inputMask";
 
 export default function ProfileForm() {
   const { form, onSubmit } = useCep();
@@ -55,7 +56,11 @@ export default function ProfileForm() {
                 <FormItem>
                   <FormLabel>CPF</FormLabel>
                   <FormControl>
-                    <Input placeholder="000.000.000-00" {...field} />
+                    <InputMasked
+                      mask="999.999.999-99"
+                      placeholder="000.000.000-00"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage className="span-error" />
                 </FormItem>
@@ -69,7 +74,7 @@ export default function ProfileForm() {
                 <FormItem>
                   <FormLabel>Data de Nascimento</FormLabel>
                   <FormControl>
-                    <Input {...field} type="date" placeholder="12/12/2000" />
+                    <Input type="date" {...field} placeholder="00/00/0000" />
                   </FormControl>
                   <FormMessage className="span-error" />
                 </FormItem>
@@ -83,9 +88,9 @@ export default function ProfileForm() {
                 <FormItem>
                   <FormLabel>Contato</FormLabel>
                   <FormControl>
-                    <Input
+                    <InputMasked
+                      mask="(99) 99999-9999"
                       placeholder="(96) 99999-9999"
-                      type="tel"
                       {...field}
                     />
                   </FormControl>
@@ -128,7 +133,7 @@ export default function ProfileForm() {
                 <FormItem>
                   <FormLabel>Estado</FormLabel>
                   <FormControl>
-                    <Input placeholder="00000-000" {...field} />
+                    <Input placeholder="Informe o estado" {...field} />
                   </FormControl>
                   <FormMessage className="span-error" />
                 </FormItem>
@@ -142,7 +147,7 @@ export default function ProfileForm() {
                 <FormItem>
                   <FormLabel>Cidade</FormLabel>
                   <FormControl>
-                    <Input placeholder="00000-000" {...field} />
+                    <Input placeholder="Informe a Cidade" {...field} />
                   </FormControl>
                   <FormMessage className="span-error" />
                 </FormItem>
@@ -162,7 +167,9 @@ export default function ProfileForm() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="0"></SelectItem>
+                      <SelectItem value="1">AP</SelectItem>
+                      <SelectItem value="2">PA</SelectItem>
+                      <SelectItem value="3">MT</SelectItem>
                     </SelectContent>
                   </Select>
                 </FormItem>
@@ -225,7 +232,7 @@ export default function ProfileForm() {
                 <FormItem>
                   <FormLabel>Número</FormLabel>
                   <FormControl>
-                    <Input placeholder="3333" {...field} />
+                    <Input placeholder="Número da casa" {...field} />
                   </FormControl>
                   <FormMessage className="span-error" />
                 </FormItem>
@@ -267,7 +274,7 @@ export default function ProfileForm() {
                 <FormItem>
                   <FormLabel>Renda Mensal</FormLabel>
                   <FormControl>
-                    <Input type="number" placeholder="R$" {...field} />
+                    <InputMasked mask="9,999.99" placeholder="R$" {...field} />
                   </FormControl>
                   <FormMessage className="span-error" />
                 </FormItem>

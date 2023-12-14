@@ -7,6 +7,7 @@ import { formSchema } from "./schema";
 import { AddressProps } from "./types";
 import axios from "axios";
 import { z } from "zod";
+import { zipCodeMask } from "@/components/Mask/cep";
 export const useCep = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -61,13 +62,12 @@ export const useCep = () => {
       );
 
       handleSetData(data);
-      console.log(data);
     },
     [handleSetData]
   );
 
   useEffect(() => {
-    form.setValue("address.zipCode", zipCode);
+    form.setValue("address.zipCode", zipCodeMask(zipCode));
     if (zipCode.length !== 9) return;
 
     handleFecthCep(zipCode);

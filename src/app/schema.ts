@@ -7,7 +7,10 @@ export const formSchema = z
       .string()
       .min(1, "Nome obrigatório")
       .max(100, "Nome muito longo"),
-    documentNumber: z.string().min(11, "O CPF é obrigatório"),
+    documentNumber: z
+      .string()
+      .min(11, "O CPF é obrigatório")
+      .transform((value) => value.replace(/\D/g, "")),
 
     birthdate: z.string().refine(
       (value) => {
@@ -20,10 +23,16 @@ export const formSchema = z
         message: "Você deve ser maior de idade para continuar.",
       }
     ),
-    phoneNumber: z.string().min(11, "Contato obrigatório"),
+    phoneNumber: z
+      .string()
+      .min(11, "Contato obrigatório")
+      .transform((value) => value.replace(/\D/g, "")),
     motherName: z.string().min(1, "Nome obrigatório"),
     address: z.object({
-      zipCode: z.string().min(9, "CEP obrigatório"),
+      zipCode: z
+        .string()
+        .min(9, "CEP obrigatório")
+        .transform((value) => value.replace(/[^0-9]/g, "")),
       addressState: z.string().min(1, "Selecione o Estado").max(2),
       city: z.string().min(1, "Selecione a Cidade"),
       addressStreet: z.string().min(1, "Informe a Rua"),
