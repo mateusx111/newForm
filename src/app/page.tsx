@@ -121,8 +121,35 @@ export default function ProfileForm() {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="address.addressState"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Estado</FormLabel>
+                  <FormControl>
+                    <Input placeholder="00000-000" {...field} />
+                  </FormControl>
+                  <FormMessage className="span-error" />
+                </FormItem>
+              )}
+            />
 
             <FormField
+              control={form.control}
+              name="address.city"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Cidade</FormLabel>
+                  <FormControl>
+                    <Input placeholder="00000-000" {...field} />
+                  </FormControl>
+                  <FormMessage className="span-error" />
+                </FormItem>
+              )}
+            />
+
+            {/* <FormField
               control={form.control}
               name="address.addressState"
               render={({ field }) => (
@@ -135,16 +162,14 @@ export default function ProfileForm() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="1">AP</SelectItem>
-                      <SelectItem value="2">PA</SelectItem>
-                      <SelectItem value="3">MT</SelectItem>
+                      <SelectItem value="0"></SelectItem>
                     </SelectContent>
                   </Select>
                 </FormItem>
               )}
-            />
+            /> */}
 
-            <FormField
+            {/* <FormField
               control={form.control}
               name="address.city"
               render={({ field }) => (
@@ -164,7 +189,7 @@ export default function ProfileForm() {
                   </Select>
                 </FormItem>
               )}
-            />
+            /> */}
 
             <FormField
               control={form.control}
@@ -254,26 +279,32 @@ export default function ProfileForm() {
               name="educationLevel"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Escolaridade</FormLabel>
+                  <div>Escolaridade</div>
                   <FormControl>
                     <RadioGroup onValueChange={field.onChange}>
-                      <FormItem className="flex items-center space-x-3 space-y-0">
+                      <FormItem className=" flex items-center space-x-3 space-y-0">
                         <FormControl>
                           <RadioGroupItem value="all" />
                         </FormControl>
-                        <FormLabel>Ensino Fundamental Completo</FormLabel>
+                        <FormLabel className="input-radio">
+                          Ensino Fundamental Completo
+                        </FormLabel>
                       </FormItem>
                       <FormItem className="flex items-center space-x-3 space-y-0">
                         <FormControl>
                           <RadioGroupItem value="mentions" />
                         </FormControl>
-                        <FormLabel>Ensino Médio Completo</FormLabel>
+                        <FormLabel className="input-radio">
+                          Ensino Médio Completo
+                        </FormLabel>
                       </FormItem>
                       <FormItem className="flex items-center space-x-3 space-y-0">
                         <FormControl>
                           <RadioGroupItem value="none" />
                         </FormControl>
-                        <FormLabel>Ensino Superior Completo</FormLabel>
+                        <FormLabel className="input-radio">
+                          Ensino Superior Completo
+                        </FormLabel>
                       </FormItem>
                     </RadioGroup>
                   </FormControl>

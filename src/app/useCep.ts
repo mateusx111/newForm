@@ -46,7 +46,7 @@ export const useCep = () => {
   const handleSetData = useCallback(
     (data: AddressProps) => {
       form.setValue("address.addressState", data.uf);
-      form.setValue("address.city", data.logradouro);
+      form.setValue("address.city", data.localidade);
       form.setValue("address.addressStreet", data.logradouro);
       form.setValue("address.addressDistrict", data.bairro);
       form.setValue("address.addressComplement", data.complemento);
@@ -61,6 +61,7 @@ export const useCep = () => {
       );
 
       handleSetData(data);
+      console.log(data);
     },
     [handleSetData]
   );

@@ -8,7 +8,6 @@ export const metadata: Metadata = {
 };
 
 export const fontSans = FontSans({
-  weight: ["400", "700"],
   subsets: ["latin"],
   variable: "--font-sans",
 });
