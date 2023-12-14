@@ -1,3 +1,5 @@
+const { fontFamily } = require("tailwindcss/defaultTheme");
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
@@ -17,13 +19,16 @@ module.exports = {
     },
     extend: {
       colors: {
+        fontFamily: {
+          sans: ["var(--font-sans)", ...fontFamily.sans],
+        },
         "custom-purple": {
           200: "#7A5CFA",
         },
         "custom-white": {
           100: "#666",
           200: "#CCC",
-          300: "#333333",
+          300: "#333",
         },
         "custom-red": {
           100: "#EB5757",

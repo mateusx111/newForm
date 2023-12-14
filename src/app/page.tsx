@@ -1,10 +1,10 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { Input } from "@/components/ui/input";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+
 import {
   Form,
   FormControl,
@@ -14,75 +14,29 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-
-const formSchema = z.object({
-  fullName: z.string().min(1, "Nome obrigatório"),
-  cpf: z.string().min(1, "O CPF é obrigatório"),
-  birth: z.date().max(new Date(), {
-    message: "Você precisa ter mais de 18 anos para continuar",
-  }),
-  contact: z.string().min(1, "Contato obrigatório"),
-  motherName: z.string().min(3, "Nome obrigatório").max(50),
-  address: z.object({
-    zipCode: z.z.string().min(9, "CEP obrigatório"),
-    state: z.string().min(1, "Selecione o Estado"),
-    city: z.string().min(1, "Selecione a Cidade"),
-    street: z.string().min(1, "Informe a Rua"),
-    district: z.string().min(1, "Informe o Bairro"),
-    number: z.string().min(1, "Informe o Número da Casa").max(40),
-    complement: z.string(),
-  }),
-  email: z.string().min(1, "Email obrigatório").email("Email inválido"),
-  password: z.string().min(10, "A senha precisa ter no mínimo 10 caracteres"),
-  confirmPassword: z.string(),
-});
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
+import { useCep } from "./useCep";
 
 export default function ProfileForm() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    criteriaMode: "all",
-    mode: "all",
-    defaultValues: {
-      fullName: "",
-      cpf: "",
-      birth: new Date(),
-      contact: "",
-      motherName: "",
-      address: {
-        zipCode: "",
-        state: "",
-        city: "",
-        street: "",
-        district: "",
-        number: "",
-        complement: "",
-      },
-      email: "",
-      password: "",
-      confirmPassword: "",
-    },
-  });
-
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-  }
+  const { form, onSubmit } = useCep();
 
   return (
-    <main className="bg-custom-bg-100 text-custom-white-100 h-screen flex flex-col items-center justify-center]">
+    <main className="bg-custom-bg-100 text-custom-white-100 h-full w-screen flex flex-col items-center justify-center">
       <Form {...form}>
-        <div className="flex flex-col items-center justify-center w-[760px] mb-[124px] mt-[52px]">
+        <div className="flex items-center justify-center w-[760px] mb-[124px] mt-[52px]">
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className=" bg-white flex flex-col gap-8 rounded px-[98px] pt-11 pb-[57px]"
+            className=" bg-white flex flex-col gap-8 w-full px-[98px] pt-11 pb-[57px]"
           >
             <FormField
               control={form.control}
-              name="fullName"
+              name="fullname"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Nome Completo</FormLabel>
@@ -96,7 +50,7 @@ export default function ProfileForm() {
 
             <FormField
               control={form.control}
-              name="cpf"
+              name="documentNumber"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>CPF</FormLabel>
@@ -110,26 +64,12 @@ export default function ProfileForm() {
 
             <FormField
               control={form.control}
-              name="cpf"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>CPF</FormLabel>
-                  <FormControl>
-                    <Input placeholder="000.000.000-00" {...field} />
-                  </FormControl>
-                  <FormMessage className="span-error" />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="birth"
+              name="birthdate"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Data de Nascimento</FormLabel>
                   <FormControl>
-                    <Input placeholder="12/12/2000" {...field} />
+                    <Input {...field} type="date" placeholder="12/12/2000" />
                   </FormControl>
                   <FormMessage className="span-error" />
                 </FormItem>
@@ -138,12 +78,16 @@ export default function ProfileForm() {
 
             <FormField
               control={form.control}
-              name="contact"
+              name="phoneNumber"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Contato</FormLabel>
                   <FormControl>
-                    <Input placeholder="(96) 99999-9999" {...field} />
+                    <Input
+                      placeholder="(96) 99999-9999"
+                      type="tel"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage className="span-error" />
                 </FormItem>
@@ -155,7 +99,7 @@ export default function ProfileForm() {
               name="motherName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Contato</FormLabel>
+                  <FormLabel>Nome da Mãe</FormLabel>
                   <FormControl>
                     <Input placeholder="Mãe" {...field} />
                   </FormControl>
@@ -166,7 +110,7 @@ export default function ProfileForm() {
 
             <FormField
               control={form.control}
-              name="CEP"
+              name="address.zipCode"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>CEP</FormLabel>
@@ -180,39 +124,156 @@ export default function ProfileForm() {
 
             <FormField
               control={form.control}
-              name="CEP"
+              name="address.addressState"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>CEP</FormLabel>
+                  <FormLabel>Estado</FormLabel>
+                  <Select onValueChange={field.onChange}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione o seu Estado" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="1">AP</SelectItem>
+                      <SelectItem value="2">PA</SelectItem>
+                      <SelectItem value="3">MT</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="address.city"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Cidade</FormLabel>
+                  <Select onValueChange={field.onChange}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione o sua Cidade" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="1">Santana</SelectItem>
+                      <SelectItem value="2">Macapá</SelectItem>
+                      <SelectItem value="3">Oiapoque</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="address.addressDistrict"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Endereço</FormLabel>
                   <FormControl>
-                    <RadioGroup
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      className="flex flex-col space-y-1"
-                    >
+                    <Input placeholder="Av." {...field} />
+                  </FormControl>
+                  <FormMessage className="span-error" />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="address.addressStreet"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Bairro</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage className="span-error" />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="address.number"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Número</FormLabel>
+                  <FormControl>
+                    <Input placeholder="3333" {...field} />
+                  </FormControl>
+                  <FormMessage className="span-error" />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="address.addressComplement"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Complemento</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Opcional" {...field} />
+                  </FormControl>
+                  <FormMessage className="span-error" />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>E-mail</FormLabel>
+                  <FormControl>
+                    <Input placeholder="@gmail.com" {...field} />
+                  </FormControl>
+                  <FormMessage className="span-error" />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="minimumWage"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Renda Mensal</FormLabel>
+                  <FormControl>
+                    <Input type="number" placeholder="R$" {...field} />
+                  </FormControl>
+                  <FormMessage className="span-error" />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="educationLevel"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Escolaridade</FormLabel>
+                  <FormControl>
+                    <RadioGroup onValueChange={field.onChange}>
                       <FormItem className="flex items-center space-x-3 space-y-0">
                         <FormControl>
                           <RadioGroupItem value="all" />
                         </FormControl>
-                        <FormLabel className="font-normal">
-                          Ensino Fundamental Completo
-                        </FormLabel>
+                        <FormLabel>Ensino Fundamental Completo</FormLabel>
                       </FormItem>
                       <FormItem className="flex items-center space-x-3 space-y-0">
                         <FormControl>
                           <RadioGroupItem value="mentions" />
                         </FormControl>
-                        <FormLabel className="font-normal">
-                          Ensino Médio Completo
-                        </FormLabel>
+                        <FormLabel>Ensino Médio Completo</FormLabel>
                       </FormItem>
                       <FormItem className="flex items-center space-x-3 space-y-0">
                         <FormControl>
                           <RadioGroupItem value="none" />
                         </FormControl>
-                        <FormLabel className="font-normal">
-                          Ensino Superior Completo
-                        </FormLabel>
+                        <FormLabel>Ensino Superior Completo</FormLabel>
                       </FormItem>
                     </RadioGroup>
                   </FormControl>
@@ -220,6 +281,41 @@ export default function ProfileForm() {
                 </FormItem>
               )}
             />
+
+            <FormField
+              control={form.control}
+              name="password.mainPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Senha</FormLabel>
+                  <FormControl>
+                    <Input type="password" placeholder="*********" {...field} />
+                  </FormControl>
+                  <FormMessage className="span-error" />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="password.confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Senha</FormLabel>
+                  <FormControl>
+                    <Input type="password" placeholder="*********" {...field} />
+                  </FormControl>
+                  <FormMessage className="span-error" />
+                </FormItem>
+              )}
+            />
+
+            <div className="flex items-center space-x-2">
+              <Switch />
+              <div className="text-custom-white-100 font-normal text-base">
+                Ver Senha
+              </div>
+            </div>
 
             <Button type="submit">Cadastrar</Button>
           </form>

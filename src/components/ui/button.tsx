@@ -45,7 +45,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <Comp
         className={cn(
-          "bg-custom-purple-200 rounded-lg font-noto font-normal p-4 text-white"
+          "bg-custom-purple-200 rounded-lg font-noto text-base font-normal p-4 text-white"
         )}
         ref={ref}
         {...props}
