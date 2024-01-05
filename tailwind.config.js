@@ -20,7 +20,7 @@ module.exports = {
     extend: {
       colors: {
         fontFamily: {
-          sans: ["var(--font-sans)", ...fontFamily.sans],
+          sans: ["var(--font-main)"],
         },
         "custom-purple": {
           200: "#7A5CFA",
